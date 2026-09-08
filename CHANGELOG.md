@@ -2,6 +2,35 @@
 
 All notable changes to `@eter/design-system` are documented in this file.
 
+## [Unreleased]
+
+### Changed
+
+- **Alcance de la 0.2.x acotado a paquete de tokens.** `README.md` y `MIGRATION.md` decían que las
+  apps debían sustituir sus espejos de `src/components/eter/` por los componentes de este paquete.
+  No es cierto todavía: los 13 componentes están escritos con hex literales en `className` (280 en
+  total, cero `var()`), así que no siguen el tema claro/oscuro, ignoran el `--primary` que configura
+  cada organización en Interfazdelmedico y rebotarían en su guardia `check:colors`. Seguir esa guía
+  habría sido un retroceso frente a lo que las apps ya tienen. La migración de componentes queda
+  documentada como fase pendiente, con el orden correcto: reescribirlos aquí contra `var(--token)`,
+  etiquetar, y recién entonces migrar app por app.
+- **El preset de Tailwind se documenta como v3.** `tailwind.config.js` usa `presets`/`content`, que
+  Tailwind v4 no consume; las dos apps ETER están en v4 y registran los tokens con `@theme` en su
+  propio CSS. El paso 3 del checklist de migración no se podía completar en ninguna de las dos.
+- **`MIGRATION.md` documenta el acceso desde CI**, que faltaba por completo: npm resuelve esta
+  dependencia como `ssh://git@github.com/…` sea cual sea la forma del spec, y un runner no tiene
+  llave SSH, así que sin reescribir la URL el `npm ci` de la app muere con
+  «Permission denied (publickey)». Es lo que dejó en rojo las ramas de adopción de las dos apps.
+- **Las etiquetas publicadas se declaran inmutables.** El lockfile de la app fija el SHA, pero mover
+  una etiqueta haría que un `npm i` trajera otro código bajo la misma versión.
+
+### Notes
+
+- Recomendación abierta: hacer **público** este repositorio. No contiene secretos ni lógica de
+  negocio, y ser privado obliga a un secret en la CI de cada app y a una llave o token en la máquina
+  de cada persona. Con el paso de reescritura que ya llevan las apps, publicarlo sólo requiere
+  borrar el secret `ETER_DS_TOKEN`.
+
 ## [0.2.0] — 2026-09-08
 
 ### Added
