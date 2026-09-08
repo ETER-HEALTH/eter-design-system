@@ -29,6 +29,13 @@ ETER is a healthcare-focused React component library. Named exports come from `@
 
 **Utility classes** — components are built with Tailwind. Compile utilities in the consuming app (or a flat CSS bundle for design-sync); this package ships source + token CSS, not a full Tailwind dist.
 
+> **Known gap.** The rule above ("always reference tokens with `var()`") is what the components
+> *should* do and what a rewrite must converge on — it is not what they do today. All 13 currently
+> hardcode literal hex in `className` (280 occurrences, zero `var()`), so they don't follow
+> light/dark and ignore a per-organization primary. Treat the token list above as the contract for
+> the rewrite, and see [MIGRATION.md § Fase pendiente](../MIGRATION.md#6-fase-pendiente-componentes)
+> before adopting a component in an app.
+
 **Fonts** — Inter for UI text; IBM Plex Mono for data/values.
 
 ## No Provider Required
