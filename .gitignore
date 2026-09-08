@@ -1,0 +1,22 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+.cache/
+
+# Build extras
+build/
+
+# More logs
+logs/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# More caches
+.turbo/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+Thumbs.db

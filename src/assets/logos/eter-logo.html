@@ -1,0 +1,121 @@
+<!-- @dsCard group="Brand" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+  <title>ETER — Logo</title>
+  <style>
+    :root{
+      --eter-primary:#a20eff;
+      --eter-surface:#ffffff;
+      --eter-surface-secondary:#f8f9fa;
+      --eter-border:#e5e7eb;
+      --eter-text:#111827;
+      --eter-text-muted:#6b7280;
+      --eter-error:#ef4444;
+      --eter-ink:#0b0713;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;padding:24px;background:var(--eter-surface);color:var(--eter-text);
+         font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+    h3{margin:0 0 4px;font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--eter-text-muted)}
+    p.note{margin:0;font-size:12px;line-height:1.5;color:var(--eter-text-muted)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:start}
+    .cell{border:1px solid var(--eter-border);border-radius:12px;padding:20px;min-width:0;background:var(--eter-surface)}
+    .cell.dark{background:var(--eter-ink);border-color:#241536}
+    .cell.dark h3{color:#a595bb}
+    .cell.dark p.note{color:#a595bb}
+    .stage{display:flex;align-items:center;justify-content:center;min-height:120px;padding:16px 0}
+    .stage img{display:block;max-width:100%}
+    .section{margin:32px 0 12px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--eter-text-muted)}
+    .row{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-end;padding:20px;border:1px solid var(--eter-border);border-radius:12px}
+    .row figure{margin:0;display:flex;flex-direction:column;gap:8px;align-items:center}
+    .row figcaption{font:500 11px/1 Inter,system-ui,sans-serif;color:var(--eter-text-muted)}
+    .clearspace{position:relative;display:inline-block;padding:var(--cs,28px);outline:1px dashed var(--eter-primary);outline-offset:-1px;border-radius:8px}
+    .swatch{display:inline-flex;align-items:center;gap:8px;font:500 12px Inter,system-ui,sans-serif;color:var(--eter-text)}
+    .chip{width:16px;height:16px;border-radius:4px;border:1px solid var(--eter-border)}
+    .dont{border-color:#fecaca;background:#fff5f5}
+    .dont h3{color:var(--eter-error)}
+    code{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px}
+  </style>
+</head><body>
+
+  <div class="grid">
+    <div class="cell">
+      <h3>Logo principal</h3>
+      <div class="stage"><img src="./eter-logo.svg" alt="ETER" style="width:240px"></div>
+      <p class="note">Isotipo + wordmark. Uso por defecto sobre fondos claros.<br><code>eter-logo.svg</code></p>
+    </div>
+    <div class="cell dark">
+      <h3>Logo principal — inverso</h3>
+      <div class="stage"><img src="./eter-logo-white.svg" alt="ETER" style="width:240px"></div>
+      <p class="note">Knockout blanco para superficies oscuras o fotografía.<br><code>eter-logo-white.svg</code></p>
+    </div>
+    <div class="cell">
+      <h3>Wordmark</h3>
+      <div class="stage"><img src="./eter-wordmark.svg" alt="ETER" style="width:180px"></div>
+      <p class="note">Solo tipografía, en púrpura de marca. Para lockups donde el isotipo ya aparece cerca.<br><code>eter-wordmark.svg</code></p>
+    </div>
+    <div class="cell dark">
+      <h3>Wordmark — inverso</h3>
+      <div class="stage"><img src="./eter-wordmark-white.svg" alt="ETER" style="width:180px"></div>
+      <p class="note"><code>eter-wordmark-white.svg</code></p>
+    </div>
+    <div class="cell">
+      <h3>Isotipo</h3>
+      <div class="stage"><img src="./eter-isotype.svg" alt="ETER" style="width:96px"></div>
+      <p class="note">Marca aislada: favicon, avatar de app, sidebar colapsado, loaders.<br><code>eter-isotype.svg</code></p>
+    </div>
+    <div class="cell dark">
+      <h3>Isotipo — inverso</h3>
+      <div class="stage"><img src="./eter-isotype-white.svg" alt="ETER" style="width:96px"></div>
+      <p class="note"><code>eter-isotype-white.svg</code></p>
+    </div>
+  </div>
+
+  <div class="section">Tamaños mínimos</div>
+  <div class="row">
+    <figure><img src="./eter-logo.svg" alt="" style="width:120px"><figcaption>120 px — mínimo digital</figcaption></figure>
+    <figure><img src="./eter-logo.svg" alt="" style="width:180px"><figcaption>180 px — nav / header</figcaption></figure>
+    <figure><img src="./eter-logo.svg" alt="" style="width:280px"><figcaption>280 px — hero / login</figcaption></figure>
+    <figure><img src="./eter-isotype.svg" alt="" style="width:24px"><figcaption>24 px — mínimo isotipo</figcaption></figure>
+    <figure><img src="./eter-isotype.svg" alt="" style="width:40px"><figcaption>40 px — sidebar</figcaption></figure>
+  </div>
+
+  <div class="section">Área de respeto</div>
+  <div class="row">
+    <figure>
+      <span class="clearspace"><img src="./eter-logo.svg" alt="" style="width:200px;display:block"></span>
+      <figcaption>Margen libre ≥ altura del isotipo por cada lado</figcaption>
+    </figure>
+    <figure>
+      <span class="clearspace" style="--cs:20px"><img src="./eter-isotype.svg" alt="" style="width:56px;display:block"></span>
+      <figcaption>Isotipo: ≥ 35 % de su alto</figcaption>
+    </figure>
+  </div>
+
+  <div class="section">Color</div>
+  <div class="row">
+    <span class="swatch"><span class="chip" style="background:#a20eff"></span> Primary <code>#a20eff</code></span>
+    <span class="swatch"><span class="chip" style="background:#111827"></span> Wordmark <code>#111827 / #000</code></span>
+    <span class="swatch"><span class="chip" style="background:#fff"></span> Knockout <code>#ffffff</code></span>
+  </div>
+
+  <div class="section">Usos incorrectos</div>
+  <div class="grid">
+    <div class="cell dont">
+      <h3>No recolorear</h3>
+      <div class="stage"><img src="./eter-logo.svg" alt="" style="width:180px;filter:hue-rotate(140deg) saturate(1.4)"></div>
+      <p class="note">El isotipo siempre en <code>#a20eff</code> o blanco.</p>
+    </div>
+    <div class="cell dont">
+      <h3>No deformar</h3>
+      <div class="stage"><img src="./eter-logo.svg" alt="" style="width:220px;height:40px"></div>
+      <p class="note">Escalar siempre de forma proporcional.</p>
+    </div>
+    <div class="cell dont">
+      <h3>No usar el color sobre fondo oscuro</h3>
+      <div class="stage" style="background:#0b0713;border-radius:8px"><img src="./eter-logo.svg" alt="" style="width:180px"></div>
+      <p class="note">El wordmark negro desaparece: usar la versión inversa.</p>
+    </div>
+  </div>
+
+</body></html>

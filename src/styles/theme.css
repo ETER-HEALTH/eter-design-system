@@ -1,0 +1,481 @@
+/* ETER Design System — Theme CSS Variables */
+/* Healthcare Technology Platform */
+
+/*
+ * Tema claro/oscuro. Dos capas con direcciones de espejo opuestas:
+ *
+ *  - Primitivas de marca (púrpura, lima, neutros, radios, sombras, tipografía): la fuente de
+ *    verdad es ESTE paquete; las apps las copian.
+ *  - Tokens semánticos claro/oscuro (superficies, texto, bordes, estados clínicos, gráficas): la
+ *    implementación de referencia vive en `interfazdelmedico/src/styles/globals.css` y se valida
+ *    contra WCAG 2.1 AA en ambos temas con `npm run check:theme` (scripts/check-contrast.mjs).
+ *    Este archivo la refleja; si un valor semántico cambia allí, se refleja aquí.
+ *
+ * Condiciones de contraste en vigor (WCAG 2.1 AA, medidas en los dos temas):
+ *   4.5:1  texto normal (1.4.3)
+ *   3:1    texto grande; bordes de controles de formulario, anillo de foco y series de
+ *          gráfica (1.4.3 / 1.4.11)
+ *   ≥1.12  relleno tenue de estado contra la tarjeta — sólo que exista visualmente: la
+ *          información la porta el texto interior, que sí se valida a 4.5:1
+ *   ≥1.3   borde tenue contra su propio relleno
+ *   Escalera de superficies en oscuro: página < barra lateral < tarjeta < popover
+ *          (tarjeta ≥1.15 sobre página; popover ≥1.1 sobre tarjeta; barra ≥1.1 sobre página).
+ *          En claro la elevación la dan sombra y borde; en oscuro sólo la luminosidad.
+ *
+ * Reglas que acompañan a los números:
+ *   - Relleno y texto viajan juntos: si un relleno no sigue al tema (hex de marca invariante,
+ *     como el lima sólido), su texto tampoco se redefine en oscuro.
+ *   - Las variantes tenues (`-subtle`) se derivan con `color-mix` contra la superficie del tema,
+ *     no como hex fijos: el mismo token invierte solo al cambiar de tema.
+ *   - `critical` es un estado clínico del paciente; `destructive` es la acción de borrar.
+ *     No son intercambiables.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Esquema con el que el navegador pinta lo que este CSS no controla (scrollbars, autofill,
+     pickers nativos). El bloque `.dark` lo cambia a `dark`; la impresión hereda `light`. */
+  color-scheme: light;
+
+  /* ─── Brand Primitives (invariantes — no cambian con el tema) ── */
+  --eter-purple-50: #f5e6ff;
+  --eter-purple-100: #e8ccff;
+  --eter-purple-200: #d199ff;
+  --eter-purple-300: #b966ff;
+  --eter-purple-400: #b033ff;
+  --eter-purple-500: #a20eff;
+  --eter-purple-600: #8a0cdb;
+  --eter-purple-700: #710ab7;
+  --eter-purple-800: #590893;
+  --eter-purple-900: #40066f;
+
+  --eter-lime-50: #f7fbcc;
+  --eter-lime-100: #eef699;
+  --eter-lime-200: #ddf066;
+  --eter-lime-300: #cce833;
+  --eter-lime-400: #c4e62e;
+  --eter-lime-500: #c1e328;
+  --eter-lime-600: #a8c820;
+  --eter-lime-700: #8fad18;
+  --eter-lime-800: #769210;
+  --eter-lime-900: #5d7708;
+
+  /* Escala neutra de marca. Hex fijos: sirven para valores de marca invariantes, NUNCA para
+     superficies ni texto de interfaz — para eso están los tokens semánticos de abajo, que sí
+     siguen al tema. */
+  --neutral-0: #ffffff;
+  --neutral-50: #fafafa;
+  --neutral-100: #f7f7f7;
+  --neutral-200: #e1e1e1;
+  --neutral-300: #c8c8c8;
+  --neutral-400: #aaaaaa;
+  --neutral-500: #777777;
+  --neutral-600: #555555;
+  --neutral-700: #333333;
+  --neutral-800: #1a1a1a;
+  --neutral-900: #000000;
+
+  /* ─── Semantic — Superficies ───────────────────────────
+     Página gris muy claro, tarjeta y popover blancos. */
+  --background: oklch(0.985 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: #ffffff;
+  --card-foreground: oklch(0.145 0 0);
+  --popover: #ffffff;
+  --popover-foreground: oklch(0.145 0 0);
+  --surface-overlay: rgba(0, 0, 0, 0.48);
+
+  --secondary: oklch(0.95 0.0058 264.53);
+  --secondary-foreground: #030213;
+  --muted: #ececf0;
+  /* 4.5:1 sobre página, tarjeta Y fondo tenue — el texto secundario aparece sobre los tres,
+     así que manda el peor caso. */
+  --muted-foreground: oklch(0.5 0.015 285);
+  --accent: #e9ebef;
+  --accent-foreground: #030213;
+
+  /* Acción de borrar — no es un estado clínico (para eso está `critical`). */
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+
+  /* ─── Semantic — Bordes y controles ────────────────────
+     `--border` es decorativo (separadores, contorno de tarjeta). `--input` es el borde de los
+     controles de formulario: cae bajo WCAG 1.4.11 y necesita 3:1 contra el relleno del campo y
+     contra la superficie sobre la que se apoya. */
+  --border: oklch(0.89 0 0);
+  --input: oklch(0.62 0 0);
+  --input-background: #f3f3f5;
+  --switch-background: oklch(0.65 0 0);
+  /* El anillo de foco es la única pista visible de dónde está el teclado: 1.4.11 exige 3:1. */
+  --ring: oklch(0.55 0 0);
+
+  /* ─── Semantic — Marca ─────────────────────────────────
+     Sólido: relleno de marca con su texto (4.5:1). Tenue: superficie de identidad derivada con
+     `color-mix` del propio primario contra la superficie del tema — sigue al tema sola y sigue
+     también al primario que una organización configure en runtime. */
+  --eter-primary: var(--eter-purple-500);
+  --eter-primary-hover: var(--eter-purple-600);
+  --eter-primary-active: var(--eter-purple-700);
+  --eter-primary-foreground: #ffffff;
+  --eter-primary-subtle: color-mix(in oklab, var(--eter-primary) 15%, var(--card));
+  --eter-primary-border: color-mix(in oklab, var(--eter-primary) 42%, var(--card));
+  --eter-primary-subtle-foreground: color-mix(in oklab, var(--eter-primary) 76%, var(--foreground));
+
+  /* ─── Semantic — Acento lima (IA/insight) ──────────────
+     Sólido: el relleno es un hex de marca invariante, así que su texto se congela con él — este
+     par NO se redefine en oscuro, a propósito (blanco sobre lima daría 1.4:1). Nunca color de
+     acción ni de estado clínico. */
+  --accent-lime: var(--eter-lime-500);
+  --accent-lime-foreground: oklch(0.145 0 0);
+  /* Tenue: éste SÍ invierte con el tema, porque se deriva contra `--card`/`--foreground`. Para
+     superficies con texto largo. Contra la página se le mide el borde, no el relleno. */
+  --accent-lime-subtle: color-mix(in oklab, var(--accent-lime) 18%, var(--card));
+  --accent-lime-border: color-mix(in oklab, var(--accent-lime) 82%, var(--foreground));
+  --accent-lime-subtle-foreground: color-mix(in oklab, var(--accent-lime) 35%, var(--foreground));
+
+  /* ─── Semantic — Estados clínicos ──────────────────────
+     Cuatro estados, cada uno con dos presentaciones:
+       `--x` + `--x-foreground`                 relleno sólido, alta prominencia (4.5:1)
+       `--x-subtle` + `--x-subtle-foreground`   etiqueta tenue en tablas y tarjetas (4.5:1) —
+                                                sustituye al patrón `-50`/`-700`, que es el que
+                                                peor se comporta al invertir el tema
+     `--x-border` acompaña a la tenue (≥1.3 contra su relleno; no se le exige 3:1 porque el chip
+     lleva su texto dentro). Los `-subtle-foreground` cumplen 4.5:1 también sueltos sobre página
+     y tarjeta, porque el texto de estado no siempre va sobre su relleno. */
+  --success: oklch(0.52 0.13 155);
+  --success-foreground: oklch(1 0 0);
+  --success-subtle: oklch(0.95 0.04 155);
+  --success-subtle-foreground: oklch(0.4 0.11 155);
+  --success-border: oklch(0.8 0.09 155);
+
+  --warning: oklch(0.55 0.13 70);
+  --warning-foreground: oklch(1 0 0);
+  --warning-subtle: oklch(0.96 0.04 85);
+  --warning-subtle-foreground: oklch(0.42 0.1 65);
+  --warning-border: oklch(0.82 0.1 80);
+
+  --info: oklch(0.52 0.16 250);
+  --info-foreground: oklch(1 0 0);
+  --info-subtle: oklch(0.96 0.03 250);
+  --info-subtle-foreground: oklch(0.42 0.14 250);
+  --info-border: oklch(0.82 0.08 250);
+
+  --critical: oklch(0.52 0.2 25);
+  --critical-foreground: oklch(1 0 0);
+  --critical-subtle: oklch(0.96 0.02 25);
+  --critical-subtle-foreground: oklch(0.44 0.18 25);
+  --critical-border: oklch(0.82 0.09 25);
+
+  /* ─── Semantic — Barra lateral ───────────────────────── */
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: var(--eter-primary);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.55 0 0);
+
+  /* ─── Semantic — Gráficas ──────────────────────────────
+     Las cinco series a 3:1 contra la tarjeta y separadas en matiz (no sólo en luminosidad),
+     para que sigan distinguiéndose con daltonismo. */
+  --chart-1: oklch(0.55 0.2 264);
+  --chart-2: oklch(0.52 0.13 165);
+  --chart-3: oklch(0.53 0.2 25);
+  --chart-4: oklch(0.55 0.17 305);
+  --chart-5: oklch(0.52 0.12 75);
+
+  /* ─── Typography ───────────────────────────────────── */
+  --font-primary: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+  /* ─── Spacing ──────────────────────────────────────── */
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ─── Radius ───────────────────────────────────────── */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 999px;
+
+  /* ─── Shadows ──────────────────────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
+  --shadow-focus: 0 0 0 2px var(--eter-primary);
+}
+
+/*
+ * Paleta oscura.
+ *
+ * Dentro de `@media screen` a propósito: todo lo que se imprime en ETER (receta, orden de
+ * laboratorio, referencia) se imprime desde el propio documento vía `window.print()`. Al acotar
+ * el bloque a `screen`, en impresión no aplica y los tokens vuelven a los valores claros de
+ * `:root` — nada de hojas negras, sin depender de `onbeforeprint`.
+ *
+ * Las primitivas de marca NO se redefinen: son invariantes. Tampoco el par sólido del lima
+ * (relleno de marca → texto congelado) ni las fórmulas `color-mix` de las variantes tenues, que
+ * re-resuelven solas contra las superficies oscuras — sólo se ajustan las proporciones que lo
+ * necesitan.
+ */
+@media screen {
+  .dark {
+    color-scheme: dark;
+
+    /* Escalera de superficies: página < barra lateral < tarjeta < popover. En oscuro las
+       sombras no se ven; la elevación la da la luminosidad. */
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.235 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.28 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+
+    --secondary: oklch(0.31 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.31 0 0);
+    --muted-foreground: oklch(0.72 0 0);
+    --accent: oklch(0.31 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+
+    --destructive: oklch(0.55 0.19 25);
+    --destructive-foreground: oklch(0.99 0.01 25);
+
+    --border: oklch(0.35 0 0);
+    --input: oklch(0.55 0 0);
+    /* Sin redefinir heredarían el relleno claro de `:root`: campos casi blancos con texto claro
+       encima (1.06:1). */
+    --input-background: oklch(0.26 0 0);
+    --switch-background: oklch(0.52 0 0);
+    --ring: oklch(0.62 0 0);
+
+    /* Misma derivación que en claro con la proporción invertida: allí `--foreground` es casi
+       negro y subir el primario oscurece el texto; aquí es casi blanco y hace falta lo
+       contrario para despegarlo del relleno. `--eter-primary-subtle` y `--eter-primary-border`
+       no se tocan: sus fórmulas ya mezclan contra la tarjeta oscura. */
+    --eter-primary-subtle-foreground: color-mix(in oklab, var(--eter-primary) 48%, var(--foreground));
+
+    /* El tenue del lima invierte igual. El relleno baja de proporción porque el lima es muy
+       claro (L≈0.87) y un 18% sobre tarjeta oscura da un verde encendido; el texto sube porque
+       aquí `--foreground` es casi blanco y hace falta más lima para leerse como acento. */
+    --accent-lime-subtle: color-mix(in oklab, var(--accent-lime) 12%, var(--card));
+    --accent-lime-border: color-mix(in oklab, var(--accent-lime) 34%, var(--card));
+    --accent-lime-subtle-foreground: color-mix(in oklab, var(--accent-lime) 72%, var(--foreground));
+
+    /* Estados clínicos: se invierte la construcción. El relleno sólido sube de luminosidad y
+       lleva texto oscuro; la tenue es un tono apagado del matiz con texto claro. */
+    --success: oklch(0.62 0.14 155);
+    --success-foreground: oklch(0.15 0.02 155);
+    --success-subtle: oklch(0.3 0.05 155);
+    --success-subtle-foreground: oklch(0.85 0.13 155);
+    --success-border: oklch(0.45 0.09 155);
+
+    --warning: oklch(0.75 0.14 80);
+    --warning-foreground: oklch(0.18 0.03 80);
+    --warning-subtle: oklch(0.32 0.05 80);
+    --warning-subtle-foreground: oklch(0.87 0.12 85);
+    --warning-border: oklch(0.48 0.08 80);
+
+    --info: oklch(0.62 0.16 250);
+    --info-foreground: oklch(0.15 0.02 250);
+    --info-subtle: oklch(0.3 0.06 250);
+    --info-subtle-foreground: oklch(0.84 0.11 250);
+    --info-border: oklch(0.46 0.1 250);
+
+    --critical: oklch(0.6 0.2 25);
+    --critical-foreground: oklch(0.15 0.02 25);
+    --critical-subtle: oklch(0.3 0.07 25);
+    --critical-subtle-foreground: oklch(0.85 0.12 25);
+    --critical-border: oklch(0.46 0.12 25);
+
+    --sidebar: oklch(0.21 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.31 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(0.35 0 0);
+    --sidebar-ring: oklch(0.62 0 0);
+
+    /* Mismos matices que en claro, subidos en luminosidad para separarse del fondo oscuro. */
+    --chart-1: oklch(0.7 0.16 264);
+    --chart-2: oklch(0.72 0.14 165);
+    --chart-3: oklch(0.68 0.18 25);
+    --chart-4: oklch(0.7 0.16 305);
+    --chart-5: oklch(0.75 0.12 75);
+  }
+}
+
+/* ─── Base Reset & Globals ────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--foreground);
+  background-color: var(--background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ─── Focus Visible ───────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ─── Typography Utilities ────────────────────────────── */
+.eter-display-xl {
+  font-size: 56px;
+  line-height: 64px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-family: var(--font-primary);
+}
+
+.eter-display-lg {
+  font-size: 48px;
+  line-height: 56px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-family: var(--font-primary);
+}
+
+.eter-h1 {
+  font-size: 40px;
+  line-height: 48px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  font-family: var(--font-primary);
+}
+
+.eter-h2 {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-family: var(--font-primary);
+}
+
+.eter-h3 {
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  font-family: var(--font-primary);
+}
+
+.eter-h4 {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+  font-family: var(--font-primary);
+}
+
+.eter-h5 {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+  font-family: var(--font-primary);
+}
+
+.eter-body-lg {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+  font-family: var(--font-primary);
+}
+
+.eter-body-md {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  font-family: var(--font-primary);
+}
+
+.eter-body-sm {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  font-family: var(--font-primary);
+}
+
+.eter-caption {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  font-family: var(--font-primary);
+}
+
+.eter-label {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  font-family: var(--font-primary);
+}
+
+.eter-button-text {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+  font-family: var(--font-primary);
+}
+
+.eter-overline {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: var(--font-primary);
+}
+
+.eter-mono {
+  font-family: var(--font-mono);
+}
+
+/* ─── Scrollbar (sigue al tema vía tokens semánticos) ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--input);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ring);
+}
+
+/* ─── Selection ───────────────────────────────────────── */
+/* Par de marca fijo (no sigue al tema): igual que el lima sólido, relleno y texto van juntos
+   y congelados — púrpura-900 sobre púrpura-100 contrasta en los dos temas. */
+::selection {
+  background: var(--eter-purple-100);
+  color: var(--eter-purple-900);
+}

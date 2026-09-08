@@ -1,0 +1,15 @@
+{
+  "projectId": "eb24ad93-1031-4264-9772-3c19230d6a70",
+  "pkg": "@eter/design-system",
+  "shape": "package",
+  "cssEntry": "dist/eter-styles-full.css",
+  "readmeHeader": ".design-sync/conventions.md",
+  "overrides": {
+    "Modal": { "cardMode": "single", "viewport": { "width": 800, "height": 560 } },
+    "DataTable": { "cardMode": "column" },
+    "ClinicalMetricCard": { "cardMode": "column" },
+    "PageHeader": { "cardMode": "column" },
+    "PatientHeader": { "cardMode": "column" },
+    "Tabs": { "cardMode": "column" }
+  }
+}
