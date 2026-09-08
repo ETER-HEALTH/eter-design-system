@@ -2,7 +2,10 @@
 
 All notable changes to `@eter/design-system` are documented in this file.
 
-## [Unreleased]
+## [0.2.1] — 2026-09-08
+
+Sólo documentación y metadatos: ningún token, componente ni asset cambia. Una app fijada a
+`#v0.2.0` no necesita mover su pin — el CSS y los tokens que consume son idénticos.
 
 ### Changed
 
