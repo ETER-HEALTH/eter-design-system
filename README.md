@@ -40,9 +40,10 @@ git config --global --add \
   "ssh://git@github.com/ETER-HEALTH/eter-design-system"
 ```
 
-Mientras este repositorio siga siendo **privado** la reescritura necesita credencial
-(`https://x-access-token:$TOKEN@github.com/…`, con un PAT fine-grained de lectura de contenido). En
-local: llave SSH en tu cuenta de GitHub, o la misma reescritura con un token propio.
+La reescritura hace falta **siempre**: el problema es el esquema `ssh`, no el permiso. Este
+repositorio es **publico**, asi que no lleva credencial y no hace falta ningun secret. Si alguna vez
+volviera a ser privado, la misma linea con credencial
+(`https://x-access-token:$TOKEN@github.com/…`, PAT fine-grained de lectura de contenido) lo resuelve.
 
 **Etiquetas.** `#v0.2.0` es una etiqueta de git, no un artefacto inmutable: el lockfile de la app
 fija el SHA, así que `npm ci` es reproducible, pero mover una etiqueta haría que un `npm i` trajera

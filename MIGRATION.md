@@ -65,8 +65,9 @@ muere con `git@github.com: Permission denied (publickey)`.
 ```
 
 `--add` no es opcional: son varios valores del mismo `insteadOf` y sin el cada uno reemplaza al
-anterior. `ETER_DS_TOKEN` hace falta mientras este repositorio sea privado; cuando pase a publico se
-borra el secret y el paso cae solo a HTTPS anonimo, sin tocar el workflow.
+anterior. Este repositorio es **publico**, asi que `ETER_DS_TOKEN` no hace falta y el paso clona por
+HTTPS anonimo; la rama con credencial se conserva por si alguna vez volviera a ser privado. Lo que
+si hace falta siempre es la reescritura: el problema es el esquema `ssh`, no el permiso.
 
 ## 2. Cargar el tema
 

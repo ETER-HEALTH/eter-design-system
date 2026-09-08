@@ -24,12 +24,11 @@ All notable changes to `@eter/design-system` are documented in this file.
 - **Las etiquetas publicadas se declaran inmutables.** El lockfile de la app fija el SHA, pero mover
   una etiqueta haría que un `npm i` trajera otro código bajo la misma versión.
 
-### Notes
-
-- Recomendación abierta: hacer **público** este repositorio. No contiene secretos ni lógica de
-  negocio, y ser privado obliga a un secret en la CI de cada app y a una llave o token en la máquina
-  de cada persona. Con el paso de reescritura que ya llevan las apps, publicarlo sólo requiere
-  borrar el secret `ETER_DS_TOKEN`.
+- **El repositorio pasa a público.** No contiene secretos ni lógica de negocio, y ser privado
+  obligaba a un secret en la CI de cada app y a una llave o token en la máquina de cada persona.
+  `README.md` y `MIGRATION.md` lo reflejan: la reescritura de URL sigue siendo obligatoria —el
+  problema es el esquema `ssh`, no el permiso— pero ya no lleva credencial. La rama con
+  `ETER_DS_TOKEN` se conserva en los workflows de las apps por si alguna vez volviera a ser privado.
 
 ## [0.2.0] — 2026-09-08
 
